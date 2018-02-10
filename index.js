@@ -5,6 +5,7 @@ var morgan  = require('morgan')
 
 morgan.token('type', function (req, res) { return JSON.stringify(req.body) })
 
+app.use(express.static('build'))
 app.use(bodyParser.json())
 app.use(morgan(':method :url :type :status :res[content-length] - :response-time ms'))
 

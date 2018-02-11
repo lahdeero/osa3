@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
-const url = 'mongodb://eero:hemmokissa@ds229008.mlab.com:29008/fullstack-phonebook'
+if ( process.env.NODE_ENV !== 'production' ) {
+  require('dotenv').config()
+}
 
 mongoose.connect(url)
 mongoose.Promise = global.Promise

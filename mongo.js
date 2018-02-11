@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 if ( process.env.NODE_ENV !== 'production' ) {
   require('dotenv').config()
 }
-
+const url = process.env.MONGODB_URI
 mongoose.connect(url)
 mongoose.Promise = global.Promise
 
@@ -12,14 +12,16 @@ const Person = mongoose.model('Person', {
   number: String
 })
 
-Person
-  .find({})
-  .then(result => {
-    result.forEach(person => {
-      console.log(person)
+if (process.argv.length < 3) {
+  Person
+    .find({})
+    .then(result => {
+      result.forEach(person => {
+        console.log(person)
+      })
+      mongoose.connection.close()
     })
-    mongoose.connection.close()
-  })
+}
 
 if (process.argv.length > 2 && process.argv[2] !== undefined) {
   const person = new Person({

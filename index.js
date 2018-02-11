@@ -37,17 +37,31 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({error: 'number missing'})
   }
 
+  let personMap = new Array()
+
   const person = new Person({
     name: body.name,
     number: body.number
   })
 
-  person
-    .save()
-    .then(formatPerson)
-    .then(savedAndFormattedPerson => {
-      response.json(formatPerson(savedAndFormattedPerson))
+  Person
+    .find({})
+    .then(result => {
+      result.forEach(person => {
+        personMap.push(person)
+      })
+      if (personMap.find(e => e.name === body.name) === undefined) {
+        person
+          .save()
+          .then(formatPerson)
+          .then(savedAndFormattedPerson => {
+            response.json(formatPerson(savedAndFormattedPerson))
+       })
+      } else {
+        response.json('Name already exists')
+      }
     })
+
 })
 
 app.put('/api/persons/:id', (request, response) => {
@@ -82,9 +96,7 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-
   let personMap = new Array()
-  let date = 
 
   Person
     .find({})
